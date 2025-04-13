@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import cities from "../data/cities";
+import products from "../data/products";
 
 const SupplierForm = ({ onAdd }) => {
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const [inventory, setInventory] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState("");
+  const [productQuantity, setProductQuantity] = useState("");
+  const [inventory, setInventory] = useState({});
+
   const handleCityChange = (e) => {
     const selectedCity = cities.find((c) => c.name === e.target.value);
     if (selectedCity) {
@@ -20,11 +24,21 @@ const SupplierForm = ({ onAdd }) => {
     }
   };
 
+  const handleAddInventory = () => {
+    if (selectedProduct && productQuantity) {
+      setInventory((prev) => ({
+        ...prev,
+        [selectedProduct]: parseInt(productQuantity),
+      }));
+      setSelectedProduct("");
+      setProductQuantity("");
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Only add if coords are available
-    if (!latitude || !longitude || !inventory) {
+    if (!latitude || !longitude || Object.keys(inventory).length === 0) {
       alert("Please complete all fields.");
       return;
     }
@@ -34,7 +48,7 @@ const SupplierForm = ({ onAdd }) => {
       city,
       lat: parseFloat(latitude),
       lng: parseFloat(longitude),
-      inventory: parseInt(inventory),
+      inventory,
     };
 
     onAdd(supplier);
@@ -43,13 +57,13 @@ const SupplierForm = ({ onAdd }) => {
     setCity("");
     setLatitude("");
     setLongitude("");
-    setInventory("");
+    setInventory({});
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 p-4 bg-white rounded-lg shadow-md "
+      className="space-y-4 p-4 bg-gray-800 text-white rounded-lg shadow-md"
     >
       <div>
         <label className="block font-semibold">Supplier Name</label>
@@ -65,7 +79,7 @@ const SupplierForm = ({ onAdd }) => {
       <div>
         <label className="block font-semibold">City</label>
         <select
-          className="w-full border rounded p-2"
+          className="w-full border rounded p-2 bg-gray-800"
           value={city}
           onChange={handleCityChange}
           required
@@ -79,39 +93,59 @@ const SupplierForm = ({ onAdd }) => {
         </select>
       </div>
 
+      <div className="hidden">
+        <input type="number" value={latitude} readOnly />
+        <input type="number" value={longitude} readOnly />
+      </div>
+
       <div>
-        <input
-          type="number"
-          className="w-full border rounded p-2"
-          value={latitude}
-          readOnly
-          hidden
-        />
+        <label className="block font-semibold">Product Inventory</label>
+        <select
+          className="w-full border rounded p-2 bg-gray-800"
+          value={selectedProduct}
+          onChange={(e) => setSelectedProduct(e.target.value)}
+        >
+          <option value="">Select a product</option>
+          {products.map((p) => (
+            <option key={p} value={p}>
+              {p}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
         <input
           type="number"
           className="w-full border rounded p-2"
-          value={longitude}
-          readOnly
-          hidden
-        />
-      </div>
-      <div>
-        <label className="block font-semibold">Inventory</label>
-        <input
-          type="number"
-          className="w-full border rounded p-2"
-          value={inventory}
-          onChange={(e) => setInventory(e.target.value)}
-          required
+          placeholder="Quantity"
+          value={productQuantity}
+          onChange={(e) => setProductQuantity(e.target.value)}
         />
       </div>
 
       <button
+        type="button"
+        className="bg-yellow-600 text-white px-4 py-2 rounded"
+        onClick={handleAddInventory}
+      >
+        Add Inventory
+      </button>
+
+      <div>
+        <h3>Current Inventory:</h3>
+        <ul>
+          {Object.entries(inventory).map(([product, quantity]) => (
+            <li key={product}>
+              {product}: {quantity}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="bg-green-600 text-white px-4 py-2 rounded"
       >
         Add Supplier
       </button>

@@ -4,6 +4,7 @@ import ConsumerForm from "./components/ConsumerForm";
 import MapView from "./components/MapView";
 import Sidebar from "./components/Sidebar";
 import { Toaster, toast } from "react-hot-toast";
+import OptimizationLog from "./components/OptimizationLog";
 
 function App() {
   const [suppliers, setSuppliers] = useState([]);
@@ -17,7 +18,6 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(supplier),
       });
-      console.log("Supplier data:", supplier);
       setSuppliers([...suppliers, supplier]);
       toast.success("Supplier added successfully!");
     } catch (err) {
@@ -90,11 +90,15 @@ function App() {
       }
 
       const data = await res.json();
-      setRoutes(data.routes);
+      setRoutes(data.assignments);
 
-      console.log("✅ Optimized Routes:", data.routes);
+      console.log(
+        "Raw Assignments:",
+        JSON.stringify(data.assignments, null, 2)
+      );
+
       toast.success(
-        `✅ Optimization complete! ${data.routes.length} routes found.`
+        `✅ Optimization complete! ${data.assignments.length} assignments found.`
       );
     } catch (error) {
       console.error("❌ Optimization failed:", error);
@@ -104,16 +108,16 @@ function App() {
 
   return (
     <div className="p-4 space-y-4 bg-zinc-900">
-      <h1 className="text-5xl font-bold text-center text-white mb-20">
+      <h1 className="text-5xl font-bold text-center text-white mb-20 mt-10">
         Supply Chain ACO Optimizer
       </h1>
-      <div className="grid grid-cols-2 gap-4 w-8/12 m-auto">
+      <div className="grid grid-cols-2 gap-4 w-10/12 m-auto">
         <SupplierForm onAdd={handleAddSupplier} />
         <ConsumerForm onAdd={handleAddConsumer} />
       </div>
       <div className="mt-10 w-full flex justify-center mb-10">
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded m-auto"
+          className="bg-emerald-600 text-white px-4 py-2 rounded m-auto"
           onClick={handleOptimize}
         >
           Optimize Supply Chain
@@ -126,7 +130,10 @@ function App() {
         onDeleteSupplier={handleDeleteSupplier}
         onDeleteConsumer={handleDeleteConsumer}
       />
-      <MapView suppliers={suppliers} consumers={consumers} routes={routes} />
+      <div className="w-10/12 m-auto flex gap-4">
+        <OptimizationLog routes={routes} />
+        <MapView suppliers={suppliers} consumers={consumers} routes={routes} />
+      </div>
     </div>
   );
 }

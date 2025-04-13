@@ -1,50 +1,71 @@
 import React from "react";
 
-export default function Sidebar({
+const Sidebar = ({
   suppliers,
   consumers,
   onDeleteSupplier,
   onDeleteConsumer,
-}) {
+}) => {
   return (
-    <div className="grid grid-cols-2 gap-4 w-8/12 m-auto mt-10 mb-10">
-      <div>
-        <h2 className="text-lg font-semibold mb-2 text-white">Suppliers</h2>
-        <ul className="space-y-1">
+    <div className="w-10/12 bg-gray-800 text-white p-4 rounded-lg shadow-lg m-auto flex gap-10">
+      <div className="flex-1">
+        <h2 className="text-xl font-semibold mb-3">Suppliers</h2>
+        <ul>
           {suppliers.map((supplier, index) => (
             <li
               key={index}
-              className="flex justify-between items-center bg-gray-100 p-2 rounded"
+              className="flex justify-between  bg-gray-700 p-4 rounded-lg shadow mb-2 "
             >
-              <span>{supplier.name}</span>
-              <span>City:{supplier.city}</span>
-              <span>Inventory: {supplier.inventory}</span>
+              <span className="font-semibold">{supplier.name}</span>
+              {/* <span className="font-semibold">{supplier.location}</span> */}
+              <div>
+                <h3 className="font-semibold">Inventory:</h3>
+                <ul>
+                  {Object.entries(supplier.inventory).map(
+                    ([product, quantity]) => (
+                      <li key={product}>
+                        {product}: {quantity}
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
               <button
                 onClick={() => onDeleteSupplier(index)}
                 className="text-red-500 hover:text-red-700"
               >
-                ✖
+                Delete
               </button>
             </li>
           ))}
         </ul>
       </div>
-      <div>
-        <h2 className="text-lg font-semibold mb-2 text-white">Consumers</h2>
-        <ul className="space-y-1">
+      <div className="flex-1">
+        <h2 className="text-xl font-semibold mb-3">Consumers</h2>
+        <ul>
           {consumers.map((consumer, index) => (
             <li
               key={index}
-              className="flex justify-between items-center bg-gray-100 p-2 rounded"
+              className="flex justify-between bg-gray-700 p-4 rounded-lg shadow mb-2"
             >
-              <span>{consumer.name}</span>
-              <span>City: {consumer.city}</span>
-              <span>Demand: {consumer.demand}</span>
+              <span className="align-text-top">{consumer.name}</span>
+              <div>
+                <h3>Demand:</h3>
+                <ul>
+                  {Object.entries(consumer.demand).map(
+                    ([product, quantity]) => (
+                      <li key={product}>
+                        {product}: {quantity}
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
               <button
                 onClick={() => onDeleteConsumer(index)}
                 className="text-red-500 hover:text-red-700"
               >
-                ✖
+                Delete
               </button>
             </li>
           ))}
@@ -52,4 +73,6 @@ export default function Sidebar({
       </div>
     </div>
   );
-}
+};
+
+export default Sidebar;
