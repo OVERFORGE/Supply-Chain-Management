@@ -3,11 +3,11 @@ class Supplier:
         self.name = name
         self.lat = lat
         self.lng = lng
-        self.inventory = inventory  # dict: { "product_name": quantity }
+        self.inventory = inventory  
 
 class Consumer:
     def __init__(self, name, lat, lng, demand):
         self.name = name
         self.lat = lat
         self.lng = lng
-        self.demand = demand  # dict: { "product_name": quantity }
+        self.demand = demand  

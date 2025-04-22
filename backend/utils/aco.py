@@ -31,7 +31,7 @@ class ACO:
         return best_solution, best_cost
 
     def construct_solution(self):
-        assignments = []  # [(supplier_name, consumer_name, product_name, quantity)]
+        assignments = []  
         remaining_demand = [
             c.demand.copy() for c in self.consumers
         ]

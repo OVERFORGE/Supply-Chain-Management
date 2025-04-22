@@ -1,11 +1,11 @@
 from flask import Blueprint, request, jsonify
-from models import Supplier, Consumer  # ensure these classes are in models.py
-from utils.distances import get_distance_matrix  # ensure this function is in utils/distances.py
-from utils.aco import ACO  # ensure ACO class is in utils/aco.py
+from models import Supplier, Consumer  
+from utils.distances import get_distance_matrix  
+from utils.aco import ACO  
 
 bp = Blueprint('supply_chain', __name__)
 
-# In-memory lists to store suppliers and consumers
+
 suppliers = []
 consumers = []
 
@@ -15,7 +15,7 @@ def add_supplier():
     name = data.get("name")
     lat = data.get("lat")
     lng = data.get("lng")
-    inventory = data.get("inventory")  # Expected to be a dict: {product: quantity}
+    inventory = data.get("inventory")  
 
     if not all([name, lat, lng, inventory]):
         return jsonify({"error": "Missing supplier data"}), 400
@@ -30,7 +30,7 @@ def add_consumer():
     name = data.get("name")
     lat = data.get("lat")
     lng = data.get("lng")
-    demand = data.get("demand")  # Expected to be a dict: {product: quantity}
+    demand = data.get("demand")  
 
     if not all([name, lat, lng, demand]):
         return jsonify({"error": "Missing consumer data"}), 400

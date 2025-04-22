@@ -11,7 +11,6 @@ import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import products from "../data/products"; // ✅ your product list
 
-// Custom supplier icon
 const supplierIcon = new L.Icon({
   iconUrl: "../../public/images/supplier_marker.png",
   iconSize: [30, 41],
@@ -19,7 +18,6 @@ const supplierIcon = new L.Icon({
   popupAnchor: [1, -34],
 });
 
-// Custom consumer icon
 const consumerIcon = new L.Icon({
   iconUrl: "../../public/images/consumer_marker.png",
   iconSize: [25, 41],
@@ -114,7 +112,6 @@ const MapView = ({ suppliers, consumers, routes }) => {
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-        {/* Supplier Markers */}
         {suppliers.map((s, idx) => (
           <Marker
             key={`s-${idx}`}
@@ -125,7 +122,6 @@ const MapView = ({ suppliers, consumers, routes }) => {
           </Marker>
         ))}
 
-        {/* Consumer Markers */}
         {consumers.map((c, idx) => (
           <Marker
             key={`c-${idx}`}
@@ -136,7 +132,6 @@ const MapView = ({ suppliers, consumers, routes }) => {
           </Marker>
         ))}
 
-        {/* Routes with product-specific colors */}
         {realRoutes.map((route, index) => (
           <Polyline
             key={index}
@@ -153,7 +148,6 @@ const MapView = ({ suppliers, consumers, routes }) => {
         ))}
       </MapContainer>
 
-      {/* ✅ Legend Box */}
       <div
         style={{
           position: "absolute",
